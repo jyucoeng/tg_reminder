@@ -30,7 +30,7 @@ def send_message_to_telegram(message, button_text='想反馈问题❓反馈个�
 
 if __name__ == "__main__":
     # 从环境变量获取自定义消息
-    custom_message = os.getenv('CUSTOM_MESSAGE', '我是你的默认消息提醒内容，该去干活了！')
+    custom_message = os.getenv('CUSTOM_MESSAGE')
     
     if not custom_message:
         print("Error: 提醒内容未设置！")
