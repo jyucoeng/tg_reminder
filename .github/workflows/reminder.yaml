@@ -1,10 +1,12 @@
 name: Send Message to Telegram
 
 on:
+  workflow_dispatch:  # 允许手动触发
   schedule:
     - cron: '16 8 14,28 * *'  # 每月的 14 号和 28 号早上 8 点 16 分执行
-  workflow_dispatch:  # 允许手动触发
-
+  push:
+    branches:
+      - main  # 或其他你希望触发的分支（加上这个玩意就会邮件提醒你脚本执行了）
 jobs:
   send_message:
     runs-on: ubuntu-latest
