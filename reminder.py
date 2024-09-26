@@ -37,7 +37,7 @@ if __name__ == "__main__":
         exit(1)  # 使用 exit(1) 替代 return
 
     # 添加前缀
-    final_message = f"自动化提醒脚本运行开始:\n-----------------------------------\n\n: {custom_message}"
+    final_message = f"自动化提醒脚本运行开始:\n-----------------------------------\n\n {custom_message}"
     
     response = send_message_to_telegram(final_message)
     
