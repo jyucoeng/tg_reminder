@@ -7,7 +7,7 @@ def send_message_to_telegram(message, button_text='想反馈问题❓反馈个�
     telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
 
     if not telegram_bot_token or not telegram_chat_id:
-        print("Error: Missing environment variables.")
+        print("Error: telegram必要参数未设置")
         return
 
     url = f'https://api.telegram.org/bot{telegram_bot_token}/sendMessage'
@@ -18,16 +18,27 @@ def send_message_to_telegram(message, button_text='想反馈问题❓反馈个�
             'inline_keyboard': [[{'text': button_text, 'url': button_url}]]
         })
     }
-    
-    response = requests.post(url, json=payload)
-    
-    if response.status_code != 200:
-        print(f"Error: {response.status_code}, {response.text}")
-    
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # 检查请求是否成功
+    except requests.exceptions.RequestException as e:
+        print(f"Error: 发送消息失败: {e}")
+        return
+
     return response.json()
 
 if __name__ == "__main__":
     # 从环境变量获取自定义消息
-    custom_message = os.getenv('CUSTOM_MESSAGE', '我是默认的提醒消息！！！！')
-    response = send_message_to_telegram(custom_message)
-    print(response)
+    custom_message = os.getenv('CUSTOM_MESSAGE', '我是你的默认消息提醒内容，该去干活了！')
+    
+    if not custom_message:
+        print("Error: 提醒内容未设置！")
+        exit(1)  # 使用 exit(1) 替代 return
+
+    # 添加前缀
+    final_message = f"自动化提醒脚本运行开始:\n-----------------------------------\n\n: {custom_message}"
+    
+    response = send_message_to_telegram(final_message)
+    
+    print("脚本执行结束~~~~")
